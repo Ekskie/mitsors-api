@@ -1,11 +1,21 @@
 import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
+import { AppModule } from './app.module';
+import cookieParser from 'cookie-parser';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  // app.setGlobalPrefix('api'); // Uncomment if you are using a global prefix
+  // app.setGlobalPrefix('api'); // Better Auth mounts at /api/auth, so global prefix might conflict if not careful.
+  // app.setGlobalPrefix('api/v1');
+  // Enable CORS to allow requests from your frontend (or localhost during dev)
+  app.enableCors({
+    origin: ['http://localhost:3000'], // Add your frontend URL here if different
+    credentials: true, // Required for cookies (session & state) to work
+  });
+
+  // Enable cookie parsing middleware
+  app.use(cookieParser());
 
   app.useGlobalPipes(
     new ValidationPipe({
@@ -14,20 +24,6 @@ async function bootstrap() {
       transform: true,
     }),
   );
-
-  app.use(
-    session({
-      secret: process.env.SESSION_SECRET || 'super-secret-key',
-      saveUninitialized: false,
-      resave: false,
-      cookie: {
-        maxAge: 60000 * 60 * 24, // 1 day
-      },
-    }),
-  );
-
-  app.use(passport.initialize());
-  app.use(passport.session());
 
   await app.listen(process.env.PORT ?? 3000);
 }

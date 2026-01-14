@@ -1,30 +1,32 @@
-import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
+import {
+  CanActivate,
+  ExecutionContext,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
+import { AuthService } from '../auth.service';
 
 @Injectable()
-export class GoogleAuthGuard extends AuthGuard('google') {
-  async canActivate(context: ExecutionContext) {
-    const activate = (await super.canActivate(context)) as boolean;
-    const request = context.switchToHttp().getRequest();
-    await super.logIn(request);
-    return activate;
-  }
-}
+export class AuthGuard implements CanActivate {
+  constructor(private readonly authService: AuthService) {}
 
-@Injectable()
-export class FacebookAuthGuard extends AuthGuard('facebook') {
-  async canActivate(context: ExecutionContext) {
-    const activate = (await super.canActivate(context)) as boolean;
+  async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
-    await super.logIn(request);
-    return activate;
-  }
-}
 
-@Injectable()
-export class AuthenticatedGuard implements CanActivate {
-  async canActivate(context: ExecutionContext) {
-    const request = context.switchToHttp().getRequest();
-    return request.isAuthenticated();
+    // Better Auth validates the session using headers (cookies)
+    const session = await this.authService.auth.api.getSession({
+      headers: request.headers,
+    });
+
+    if (!session) {
+      throw new UnauthorizedException();
+    }
+
+    // Attach user and session to the request object
+    // allowing you to access `req.user` in your controllers
+    request.user = session.user;
+    request.session = session.session;
+
+    return true;
   }
 }

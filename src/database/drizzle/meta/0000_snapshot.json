@@ -1,11 +1,11 @@
 {
-  "id": "f8ab36fd-9823-4c64-85f8-feba8e9f1e85",
+  "id": "798dd96a-cd8d-4eec-ad9a-5d6b556005f0",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
-    "public.profiles": {
-      "name": "profiles",
+    "public.price_inputs": {
+      "name": "price_inputs",
       "schema": "",
       "columns": {
         "id": {
@@ -15,35 +15,62 @@
           "notNull": true,
           "default": "gen_random_uuid()"
         },
-        "first_name": {
-          "name": "first_name",
+        "userId": {
+          "name": "userId",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "price_verification_status": {
+          "name": "price_verification_status",
+          "type": "price_verification_status",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'unverified'"
+        },
+        "region": {
+          "name": "region",
           "type": "text",
           "primaryKey": false,
           "notNull": true
         },
-        "last_name": {
-          "name": "last_name",
+        "city": {
+          "name": "city",
           "type": "text",
           "primaryKey": false,
           "notNull": true
         },
-        "email": {
-          "name": "email",
-          "type": "text",
+        "price_per_kg": {
+          "name": "price_per_kg",
+          "type": "numeric(10, 2)",
           "primaryKey": false,
           "notNull": true
         },
-        "phone": {
-          "name": "phone",
+        "livestock_type": {
+          "name": "livestock_type",
+          "type": "livestock_type",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "breed": {
+          "name": "breed",
           "type": "text",
           "primaryKey": false,
           "notNull": false
         },
-        "address": {
-          "name": "address",
+        "notes": {
+          "name": "notes",
           "type": "text",
           "primaryKey": false,
           "notNull": false
+        },
+        "date_observed": {
+          "name": "date_observed",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
         },
         "created_at": {
           "name": "created_at",
@@ -63,21 +90,31 @@
       "indexes": {},
       "foreignKeys": {},
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {
-        "profiles_email_unique": {
-          "name": "profiles_email_unique",
-          "nullsNotDistinct": false,
-          "columns": [
-            "email"
-          ]
-        }
-      },
+      "uniqueConstraints": {},
       "policies": {},
       "checkConstraints": {},
       "isRLSEnabled": false
     }
   },
-  "enums": {},
+  "enums": {
+    "public.livestock_type": {
+      "name": "livestock_type",
+      "schema": "public",
+      "values": [
+        "fattener",
+        "piglet",
+        "both"
+      ]
+    },
+    "public.price_verification_status": {
+      "name": "price_verification_status",
+      "schema": "public",
+      "values": [
+        "verified",
+        "unverified"
+      ]
+    }
+  },
   "schemas": {},
   "sequences": {},
   "roles": {},

@@ -525,6 +525,12 @@ export class ProductsService {
 }
 ```
 
+### Updates (Flexible Input Acceptance)
+
+- **Livestock Type**: Stored as free-form `text` instead of enum to accept any value sent by the frontend.
+- **Region/City/Breed/Notes**: Accepted as `string` values without strict backend validation; frontend controls the options. Validation remains for `pricePerKg` range and date formatting.
+- **Regional Aggregation Metadata**: Total regions count is derived from returned data rather than hard-coded.
+
 3. **DATABASE Migrations**:
    - Use `npm run db:generate` to generate migration files
    - Use `npm run db:migrate` to run migrations

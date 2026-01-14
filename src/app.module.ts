@@ -4,6 +4,7 @@ import path from 'path';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { DatabaseModule } from './database/database.module';
+import { PricesModule } from './prices/prices.module';
 import { AuthModule } from './auth/auth.module';
 
 @Module({
@@ -13,6 +14,7 @@ import { AuthModule } from './auth/auth.module';
       envFilePath: path.join(__dirname, '../.env'),
     }),
     DatabaseModule,
+    PricesModule,
     AuthModule,
   ],
   controllers: [AppController],
