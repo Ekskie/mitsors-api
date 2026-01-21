@@ -6,15 +6,15 @@ import cookieParser from 'cookie-parser';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  // app.setGlobalPrefix('api'); // Better Auth mounts at /api/auth, so global prefix might conflict if not careful.
-  // app.setGlobalPrefix('api/v1');
-  // Enable CORS to allow requests from your frontend (or localhost during dev)
+  // 1. Enable the global prefix to match your URL structure (/api/v1/...)
+  app.setGlobalPrefix('api/v1');
+
+  // Enable CORS to allow requests from your frontend
   app.enableCors({
-    origin: ['http://localhost:3000'], // Add your frontend URL here if different
-    credentials: true, // Required for cookies (session & state) to work
+    origin: ['http://localhost:3000'],
+    credentials: true,
   });
 
-  // Enable cookie parsing middleware
   app.use(cookieParser());
 
   app.useGlobalPipes(

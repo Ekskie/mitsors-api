@@ -29,19 +29,19 @@ export class AuthService implements OnModuleInit {
       emailAndPassword: {
         enabled: true,
       },
-      // Ensure this matches exactly what is in your Google Console "Authorized redirect URIs"
-      baseURL: process.env.BETTER_AUTH_URL || 'http://localhost:3000/api/auth',
+      // Ensure this matches the full path your NestJS app is serving
+      // If main.ts has globalPrefix 'api/v1' and Controller has 'auth', this must include both.
+      baseURL:
+        process.env.BETTER_AUTH_URL || 'http://localhost:3000/api/v1/auth',
+      basePath: '/api/v1/auth', // Explicitly set the base path for internal routing
       secret: process.env.BETTER_AUTH_SECRET || 'generated-secret-key',
-      // Trusted origins are important if you are calling this from a frontend on a different port
       trustedOrigins: ['http://localhost:3000'],
-      // Enable debug logging to see exactly why state validation fails
       advanced: {
         defaultCookieAttributes: {
-          sameSite: 'lax', // Relax cookie policy for easier local testing
-          secure: false, // Ensure cookies work on http://localhost
+          sameSite: 'lax',
+          secure: false,
         },
       },
-      // Skip state check to resolve state_mismatch errors during development
       social: {
         skipStateCheck: true,
       } as any,
