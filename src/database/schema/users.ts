@@ -1,5 +1,6 @@
 import { pgTable, text, timestamp, boolean, jsonb } from 'drizzle-orm/pg-core';
 
+// Single table approach following 'develop' branch
 export const user = pgTable('user', {
   id: text('id').primaryKey(),
   name: text('name').notNull(),
@@ -9,15 +10,21 @@ export const user = pgTable('user', {
   createdAt: timestamp('created_at').notNull(),
   updatedAt: timestamp('updated_at').notNull(),
 
-  // Custom Fields
+  // Profile fields merged into the user table per .md requirements
   firstName: text('first_name'),
   lastName: text('last_name'),
-  region: text('region'),
+  displayName: text('display_name'),
+  region: text('region'), 
   city: text('city'),
   userRoles: jsonb('user_roles').$type<string[]>().default(['user']),
   verificationStatus: text('verification_status').default('unverified'),
 });
 
+// ALIAS: This allows "import { profiles } from '../schema'" to work
+// and fixes the "email does not exist in profiles" error.
+export const profiles = user;
+
+// Better Auth support tables
 export const session = pgTable('session', {
   id: text('id').primaryKey(),
   expiresAt: timestamp('expires_at').notNull(),
@@ -26,18 +33,14 @@ export const session = pgTable('session', {
   updatedAt: timestamp('updated_at').notNull(),
   ipAddress: text('ip_address'),
   userAgent: text('user_agent'),
-  userId: text('user_id')
-    .notNull()
-    .references(() => user.id),
+  userId: text('user_id').notNull().references(() => user.id),
 });
 
 export const account = pgTable('account', {
   id: text('id').primaryKey(),
   accountId: text('account_id').notNull(),
   providerId: text('provider_id').notNull(),
-  userId: text('user_id')
-    .notNull()
-    .references(() => user.id),
+  userId: text('user_id').notNull().references(() => user.id),
   accessToken: text('access_token'),
   refreshToken: text('refresh_token'),
   idToken: text('id_token'),

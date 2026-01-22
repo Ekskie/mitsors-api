@@ -7,20 +7,25 @@ import { DrizzleService } from '../database/drizzle.service';
 import { profiles } from '../database/schema/profiles';
 import { eq } from 'drizzle-orm';
 
+// Updated DTOs to match your documentation and schema
 export type CreateProfileDto = {
   firstName: string;
   lastName: string;
   email: string;
-  phone?: string;
-  address?: string;
+  displayName?: string;
+  region?: string;
+  city?: string;
+  userRoles?: any[];
 }
 
 export type UpdateProfileDto = {
   firstName?: string;
   lastName?: string;
   email?: string;
-  phone?: string;
-  address?: string;
+  displayName?: string;
+  region?: string;
+  city?: string;
+  userRoles?: any[];
 }
 
 @Injectable()
@@ -28,7 +33,6 @@ export class ProfilesService {
   constructor(private drizzleService: DrizzleService) { }
 
   async create(createProfileDto: CreateProfileDto) {
-    // Check if email already exists
     const existing = await this.drizzleService.db
       .select()
       .from(profiles)
@@ -42,14 +46,17 @@ export class ProfilesService {
       });
     }
 
+    // REMOVED 'phone' and 'address', ADDED new fields
     const [newProfile] = await this.drizzleService.db
       .insert(profiles)
       .values({
         firstName: createProfileDto.firstName,
         lastName: createProfileDto.lastName,
         email: createProfileDto.email,
-        phone: createProfileDto.phone || null,
-        address: createProfileDto.address || null,
+        displayName: createProfileDto.displayName || `${createProfileDto.firstName} ${createProfileDto.lastName}`,
+        region: createProfileDto.region || null,
+        city: createProfileDto.city || null,
+        userRoles: createProfileDto.userRoles || [],
       })
       .returning();
 
@@ -78,10 +85,8 @@ export class ProfilesService {
   }
 
   async update(id: string, updateProfileDto: UpdateProfileDto) {
-    // Check if profile exists
     await this.findOne(id);
 
-    // If email is being updated, check if it's already taken
     if (updateProfileDto.email) {
       const existing = await this.drizzleService.db
         .select()
@@ -111,7 +116,6 @@ export class ProfilesService {
   }
 
   async remove(id: string) {
-    // Check if profile exists
     await this.findOne(id);
 
     const [deletedProfile] = await this.drizzleService.db
@@ -122,4 +126,3 @@ export class ProfilesService {
     return deletedProfile;
   }
 }
-

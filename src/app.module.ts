@@ -6,6 +6,7 @@ import { AppService } from './app.service';
 import { DatabaseModule } from './database/database.module';
 import { PricesModule } from './prices/prices.module';
 import { AuthModule } from './auth/auth.module';
+import { UsersModule } from './users/users.module'; // Combined from users-api-postgres
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { AuthModule } from './auth/auth.module';
     DatabaseModule,
     PricesModule,
     AuthModule,
+    UsersModule, // Combined from users-api-postgres
   ],
   controllers: [AppController],
   providers: [AppService],

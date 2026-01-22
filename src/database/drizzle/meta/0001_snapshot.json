@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
   "id": "a1300981-95dc-4d04-87a7-b137264dc030",
   "prevId": "798dd96a-cd8d-4eec-ad9a-5d6b556005f0",
   "version": "7",
@@ -117,6 +118,9 @@
   }
 }{
   "id": "bdfd2122-8f3c-4960-b2d8-320aecb622b5",
+=======
+  "id": "426e9564-a9f9-4412-9ab7-4bdcc87f8a6e",
+>>>>>>> users-api-postgres
   "prevId": "f8ab36fd-9823-4c64-85f8-feba8e9f1e85",
   "version": "7",
   "dialect": "postgresql",
@@ -193,12 +197,18 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
+<<<<<<< HEAD
     "public.users": {
       "name": "users",
+=======
+    "public.submissions": {
+      "name": "submissions",
+>>>>>>> users-api-postgres
       "schema": "",
       "columns": {
         "id": {
           "name": "id",
+<<<<<<< HEAD
           "type": "serial",
           "primaryKey": true,
           "notNull": true
@@ -253,10 +263,56 @@
         },
         "city": {
           "name": "city",
+=======
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "profile_id": {
+          "name": "profile_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "region": {
+          "name": "region",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "city": {
+          "name": "city",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "price_per_kg": {
+          "name": "price_per_kg",
+          "type": "numeric(10, 2)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "livestock_type": {
+          "name": "livestock_type",
+          "type": "varchar(50)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "breed": {
+          "name": "breed",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "notes": {
+          "name": "notes",
+>>>>>>> users-api-postgres
           "type": "text",
           "primaryKey": false,
           "notNull": false
         },
+<<<<<<< HEAD
         "user_roles": {
           "name": "user_roles",
           "type": "jsonb",
@@ -267,28 +323,52 @@
         "verification_status": {
           "name": "verification_status",
           "type": "text",
+=======
+        "verification_status": {
+          "name": "verification_status",
+          "type": "varchar(50)",
+>>>>>>> users-api-postgres
           "primaryKey": false,
           "notNull": false,
           "default": "'unverified'"
         },
+<<<<<<< HEAD
+=======
+        "date_observed": {
+          "name": "date_observed",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+>>>>>>> users-api-postgres
         "created_at": {
           "name": "created_at",
           "type": "timestamp",
           "primaryKey": false,
+<<<<<<< HEAD
           "notNull": false,
+=======
+          "notNull": true,
+>>>>>>> users-api-postgres
           "default": "now()"
         },
         "updated_at": {
           "name": "updated_at",
           "type": "timestamp",
           "primaryKey": false,
+<<<<<<< HEAD
           "notNull": false,
+=======
+          "notNull": true,
+>>>>>>> users-api-postgres
           "default": "now()"
         }
       },
       "indexes": {},
       "foreignKeys": {},
       "compositePrimaryKeys": {},
+<<<<<<< HEAD
       "uniqueConstraints": {
         "users_email_unique": {
           "name": "users_email_unique",
@@ -298,6 +378,9 @@
           ]
         }
       },
+=======
+      "uniqueConstraints": {},
+>>>>>>> users-api-postgres
       "policies": {},
       "checkConstraints": {},
       "isRLSEnabled": false

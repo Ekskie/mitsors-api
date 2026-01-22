@@ -15,4 +15,8 @@ export default defineConfig({
   },
   verbose: true,
   strict: true,
+  // --- THE GUARDRAIL ---
+  // This tells Drizzle to ONLY manage these tables. 
+  // It will ignore the 'verification' table entirely.
+  tablesFilter: ['profiles', 'submissions'], 
 });

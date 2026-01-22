@@ -36,6 +36,13 @@
       "when": 1766029213388,
       "tag": "0002_petite_spitfire",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1766026863894,
+      "tag": "0001_glossy_old_lace",
+      "breakpoints": true
     }
   ]
 }
