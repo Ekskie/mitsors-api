@@ -16,7 +16,7 @@ Optional - Can be accessed by both anonymous and authenticated users.
 
 ### Path
 
-`/api/v1/prices/aggregated`
+`/api/prices/aggregated`
 
 ### Query Parameters
 

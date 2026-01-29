@@ -1,84 +1,59 @@
-// @ts-check
-import eslint from '@eslint/js';
-import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended';
-import globals from 'globals';
-import tseslint from 'typescript-eslint';
-import unusedImports from 'eslint-plugin-unused-imports';
-import importQuotes from 'eslint-plugin-import-quotes';
+import { defineConfig, globalIgnores } from 'eslint/config';
+import nextVitals from 'eslint-config-next/core-web-vitals';
+import nextTs from 'eslint-config-next/typescript';
 import unicorn from 'eslint-plugin-unicorn';
 
-export default tseslint.config(
-  ...tseslint.configs.recommendedTypeChecked,
-  {
-    ignores: ['eslint.config.mjs'],
-  },
-  eslint.configs.recommended,
-  ...tseslint.configs.recommendedTypeChecked,
-  eslintPluginPrettierRecommended,
-  {
-    languageOptions: {
-      globals: {
-        ...globals.node,
-        ...globals.jest,
-      },
-      sourceType: 'commonjs',
-      parserOptions: {
-        projectService: true,
-        tsconfigRootDir: import.meta.dirname,
-      },
-    },
-  },
-  {
-    files: ['*.js'], // ✅ Only for JS files
-    rules: {
-      '@typescript-eslint/no-require-imports': 'off', // ✅ Allow require() in JS files
-    },
-  },
+const eslintConfig = defineConfig([
+  ...nextVitals,
+  ...nextTs,
+  // Override default ignores of eslint-config-next.
+  globalIgnores([
+    // Default ignores of eslint-config-next:
+    '.next/**',
+    'out/**',
+    'build/**',
+    'next-env.d.ts',
+  ]),
   {
     plugins: {
-      'unused-imports': unusedImports, // ✅ Added from first config
-      'import-quotes': importQuotes, // ✅ Added from first config
-      unicorn: unicorn,
+      unicorn,
     },
     rules: {
-      // ✅ Added rules from first config
-      quotes: ['error', 'single'],
-      'import-quotes/import-quotes': ['error', 'single'],
-      'no-multiple-empty-lines': ['error', { max: 1 }],
-      'unused-imports/no-unused-imports': 'error',
-      'unused-imports/no-unused-vars': [
-        'warn',
-        {
-          vars: 'all',
-          varsIgnorePattern: '^_',
-          args: 'after-used',
-          argsIgnorePattern: '^_',
-        },
-      ],
-      '@typescript-eslint/consistent-type-definitions': ['error', 'type'],
-      'comma-dangle': [
+      // 1. Prefer single quotes
+      quotes: [
         'error',
-        {
-          arrays: 'always-multiline',
-          objects: 'always-multiline',
-          imports: 'always-multiline',
-          exports: 'always-multiline',
-          functions: 'always-multiline',
-        },
+        'single',
+        { avoidEscape: true, allowTemplateLiterals: true },
       ],
-      'prefer-const': 'error',
-      '@typescript-eslint/no-explicit-any': 'off',
+
+      // 2. Maximum 1 empty line between code
+      'no-multiple-empty-lines': ['error', { max: 1, maxEOF: 0, maxBOF: 0 }],
+
+      // 3. Kebab-case for files and folders
       'unicorn/filename-case': [
         'error',
         {
-          cases: {
-            kebabCase: true,
-          },
+          case: 'kebabCase',
+          ignore: [
+            /^[A-Z]/,
+            /\.(tsx?|jsx?|mjs|cjs|json)$/i,
+            /^next-env\.d\.ts$/,
+          ],
         },
       ],
+
+      // 4. Remove unused imports
+      '@typescript-eslint/no-unused-vars': [
+        'error',
+        {
+          argsIgnorePattern: '^_',
+          varsIgnorePattern: '^_',
+          caughtErrorsIgnorePattern: '^_',
+        },
+      ],
+      'no-unused-vars': 'off', // Turn off base rule as it conflicts with @typescript-eslint version
     },
   },
-  {
-    ignores: ['dist/**', 'build/**'],
-  },
-);
+]);
+
+export default eslintConfig;
